@@ -33,7 +33,19 @@
       enable = true;
       name = "gitleaks-security-scan";
       entry = "${pkgs.gitleaks}/bin/gitleaks detect --source .";
-      excludes = [ ".devenv/" "result" "node_modules/" "coverage/" "dist/" "build/" ];
+      excludes = [
+        ".devenv/"
+        "result"
+        "node_modules/"
+        "coverage/"
+        "dist/"
+        "build/"
+        # Template files from ai-quality-devenv (not production code)
+        "scripts/"
+        "modules/"
+        ".ai-templates/"
+        "*.md"
+      ];
     };
 
     # Code quality checks
