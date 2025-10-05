@@ -44,7 +44,7 @@
         "scripts/"
         "modules/"
         ".ai-templates/"
-        "*.md"
+        ".*\\.md$"  # Escaped for Python regex
       ];
     };
 

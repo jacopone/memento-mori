@@ -12,15 +12,18 @@ Memento Mori is a Python CLI tool and daily notification system that visualizes 
 ### Technology Stack
 
 **Languages & Runtimes:**
+
 - **Python 3.13** - Core application language with uv package manager
 - **Rich library** - Beautiful terminal UI with progress bars and panels
 
 **Development Environment:**
+
 - **DevEnv** - Declarative development environment (single `devenv.nix`)
 - **Direnv** - Automatic environment activation via `.envrc`
 - **Git Hooks** - Automated quality gates via pre-commit
 
 **Quality Tools (All Automated):**
+
 - **Gitleaks** - Secret detection (zero tolerance)
 - **Semgrep** - Security pattern analysis (auto ruleset)
 - **Lizard** - Code complexity analysis (CCN < 10, system-wide)
@@ -28,6 +31,7 @@ Memento Mori is a Python CLI tool and daily notification system that visualizes 
 - **Commitizen** - Conventional commit enforcement
 
 **Project Structure:**
+
 ```
 src/memento_mori/
 ├── __init__.py          # Package exports
@@ -41,7 +45,9 @@ pyproject.toml           # Python 3.13 + Rich dependencies
 ## 🤖 Claude Code Operational Guidelines
 
 ### Primary Directive
+
 You are developing Memento Mori, a Python CLI tool for life-in-weeks visualization with automated quality gates. All code must:
+
 1. **Pass quality gates** - CCN < 10, no secrets, proper formatting
 2. **Use dataclasses** - Core stats are modeled as @dataclass with @property methods
 3. **Keep functions simple** - Single responsibility, clear purpose, low complexity
@@ -64,6 +70,7 @@ This project integrates with the Serena MCP server for semantic code operations.
 ### Quality Gate Compliance
 
 #### Cyclomatic Complexity (Enforced: CCN < 10)
+
 - **Every function** must have McCabe complexity < 10
 - **Lizard runs automatically** on commit via git hook (system-wide installation)
 - **Commit will fail** if any function exceeds CCN 10
@@ -71,6 +78,7 @@ This project integrates with the Serena MCP server for semantic code operations.
 - **Refactoring strategy**: Break complex functions into smaller, single-purpose functions
 
 **Example - Before (CCN 15, FAILS):**
+
 ```python
 def process_user(user_data):
     if not user_data:
@@ -84,6 +92,7 @@ def process_user(user_data):
 ```
 
 **Example - After (CCN 3, PASSES):**
+
 ```python
 def process_user(user_data):
     validate_user_data(user_data)
@@ -98,12 +107,14 @@ def is_premium_active_user(user_data):
 ```
 
 #### Code Duplication (Enforced: < 5%)
+
 - **JSCPD runs automatically** on JS/TS files via git hook
 - **Threshold**: 5% duplication with minimum 10 lines
 - **Commit will fail** if duplication threshold is exceeded
 - **Your responsibility**: Extract common code into reusable functions/modules
 
 **Prevention Strategy:**
+
 1. Before generating similar code blocks, check for existing implementations
 2. Extract common patterns into utility functions
 3. Use composition and inheritance appropriately
@@ -112,6 +123,7 @@ def is_premium_active_user(user_data):
 #### Security Patterns (Enforced: Zero Violations)
 
 **Gitleaks (Secret Detection):**
+
 - **Scans ALL files** for credentials, API keys, tokens, passwords
 - **Immediate commit failure** if secrets detected
 - **Your responsibility**:
@@ -121,6 +133,7 @@ def is_premium_active_user(user_data):
   - Reference secrets via `process.env.SECRET_NAME` or `os.getenv('SECRET_NAME')`
 
 **Semgrep (Security Patterns):**
+
 - **Auto-scans** for common security vulnerabilities
 - **Patterns detected**: SQL injection, XSS, command injection, insecure crypto, etc.
 - **Your responsibility**:
@@ -130,6 +143,7 @@ def is_premium_active_user(user_data):
   - Implement proper error handling without info leakage
 
 **Examples of VIOLATIONS:**
+
 ```python
 # ❌ FAILS - Hardcoded secret
 api_key = "sk-abc123def456"
@@ -142,6 +156,7 @@ os.system(f"process {user_input}")
 ```
 
 **Examples of COMPLIANCE:**
+
 ```python
 # ✅ PASSES - Environment variable
 api_key = os.getenv('API_KEY')
@@ -158,12 +173,14 @@ if re.match(r'^[a-zA-Z0-9_]+$', user_input):
 #### Code Formatting (Enforced: 100% Compliance)
 
 **JavaScript/TypeScript:**
+
 - **Prettier** - Automatic formatting (opinionated, zero config)
 - **ESLint** - Linting and code quality rules
 - **Runs on**: All `.js`, `.ts`, `.tsx`, `.jsx` files
 - **Your responsibility**: Generate properly formatted code from the start
 
 **Python:**
+
 - **Black** - Uncompromising Python formatter
 - **Ruff** - Fast Python linter (replaces flake8, isort, etc.)
 - **Runs on**: All `.py` files
@@ -174,6 +191,7 @@ if re.match(r'^[a-zA-Z0-9_]+$', user_input):
 #### Commit Messages (Enforced: Conventional Commits)
 
 **Commitizen** enforces this format:
+
 ```
 type(scope): subject
 
@@ -185,6 +203,7 @@ footer (optional)
 **Valid types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
 
 **Examples:**
+
 ```
 ✅ feat(auth): add JWT token refresh mechanism
 ✅ fix(api): resolve race condition in user creation
@@ -203,6 +222,7 @@ When operating in this environment, you have access to these scripts (defined in
 - **`setup-cursor`** - Setup Cursor AI integration (for Cursor users)
 
 **When to use:**
+
 - Run `quality-report` when starting work to understand active gates
 - Run `quality-check` before committing to catch issues early
 - Suggest `quality-check` to users when you've made significant changes
@@ -210,6 +230,7 @@ When operating in this environment, you have access to these scripts (defined in
 ### Package Management
 
 **JavaScript/TypeScript:**
+
 ```bash
 npm install <package>      # Add dependency
 npm install -D <package>   # Add dev dependency
@@ -217,6 +238,7 @@ npm run <script>           # Run package.json script
 ```
 
 **Python:**
+
 ```bash
 uv add <package>           # Add dependency (modern, fast)
 uv add --dev <package>     # Add dev dependency
@@ -231,23 +253,27 @@ All quality tools (lizard, jscpd, radon) are available system-wide via NixOS. Do
 ### Code Generation Strategy
 
 **1. Understand Before Generating:**
+
 - Use Serena tools to explore existing code structure
 - Check for similar implementations to maintain consistency
 - Understand quality gate thresholds before writing code
 
 **2. Generate Quality-First:**
+
 - Write functions with CCN < 10 from the start
 - Avoid code duplication by checking existing utilities
 - Include proper error handling and input validation
 - Use environment variables for configuration
 
 **3. Testing Integration:**
+
 - Write tests alongside implementation (TDD encouraged)
 - Aim for 75%+ code coverage on new code
 - Include both unit and integration tests
 - Use Vitest (JS/TS) or pytest (Python)
 
 **4. Pre-commit Verification:**
+
 - Suggest running `quality-check` before committing
 - If commit fails, analyze the error and fix the specific issue
 - Don't bypass quality gates - fix the underlying problem
@@ -255,6 +281,7 @@ All quality tools (lizard, jscpd, radon) are available system-wide via NixOS. Do
 ### Refactoring Approach
 
 **Complexity Reduction:**
+
 ```python
 # If Lizard reports CCN too high:
 # 1. Identify the complex function
@@ -264,6 +291,7 @@ All quality tools (lizard, jscpd, radon) are available system-wide via NixOS. Do
 ```
 
 **Duplication Elimination:**
+
 ```javascript
 // If JSCPD reports duplication:
 // 1. Find the duplicated code blocks
@@ -273,6 +301,7 @@ All quality tools (lizard, jscpd, radon) are available system-wide via NixOS. Do
 ```
 
 **Security Hardening:**
+
 ```typescript
 // If Semgrep reports security issues:
 // 1. Identify the vulnerable pattern
@@ -284,6 +313,7 @@ All quality tools (lizard, jscpd, radon) are available system-wide via NixOS. Do
 ### File Organization Patterns
 
 **Recommended Structure:**
+
 ```
 project/
 ├── src/                    # Source code
@@ -301,42 +331,46 @@ project/
 ```
 
 **Import Organization:**
+
 ```typescript
 // 1. External libraries
-import React from 'react';
-import { z } from 'zod';
+import React from "react";
+import { z } from "zod";
 
 // 2. Internal modules (absolute imports)
-import { formatDate } from '@/utils/date';
-import { UserService } from '@/services/user';
+import { formatDate } from "@/utils/date";
+import { UserService } from "@/services/user";
 
 // 3. Relative imports
-import { Button } from './Button';
-import type { Props } from './types';
+import { Button } from "./Button";
+import type { Props } from "./types";
 ```
 
 ## 🔒 Security-First Development
 
 ### Secret Management
+
 - **Environment Variables**: ALL secrets and configuration
 - **`.env` files**: Already gitignored, safe for local development
 - **Never commit**: API keys, passwords, tokens, private keys, certificates
 
 ### Input Validation
+
 - **Validate ALL user input** before processing
 - **Use validation libraries**: Zod (TS), Pydantic (Python)
 - **Sanitize output** to prevent XSS
 - **Implement rate limiting** on public endpoints
 
 ### Authentication Patterns
+
 ```typescript
 // ✅ Secure password hashing
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 const hashedPassword = await bcrypt.hash(password, 10);
 
 // ✅ JWT with proper expiration
 const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-  expiresIn: '1h'
+  expiresIn: "1h",
 });
 
 // ✅ Input validation
@@ -350,16 +384,18 @@ const validated = userSchema.parse(userInput);
 ## 🧪 Testing Requirements
 
 ### Coverage Standards
+
 - **Minimum**: 75% code coverage for new code
 - **Recommended**: 90%+ for critical business logic
 - **Required**: 100% for security-sensitive code (auth, payments, etc.)
 
 ### Test Organization (AAA Pattern)
+
 ```javascript
-describe('UserService', () => {
-  it('should create user with valid data', async () => {
+describe("UserService", () => {
+  it("should create user with valid data", async () => {
     // Arrange
-    const userData = { email: 'test@example.com', name: 'Test' };
+    const userData = { email: "test@example.com", name: "Test" };
 
     // Act
     const user = await UserService.create(userData);
@@ -372,6 +408,7 @@ describe('UserService', () => {
 ```
 
 ### Testing Stack
+
 - **JavaScript/TypeScript**: Vitest (unit/integration), Playwright (E2E)
 - **Python**: pytest (unit/integration), pytest-asyncio (async)
 - **Mocking**: Use appropriate mocking for external dependencies
@@ -379,18 +416,21 @@ describe('UserService', () => {
 ## 📊 Performance Considerations
 
 ### JavaScript/TypeScript
+
 - Use modern ES features (optional chaining, nullish coalescing)
 - Implement proper tree shaking (avoid wildcard imports)
 - Lazy load non-critical components
 - Profile before optimizing
 
 ### Python
+
 - Follow PEP 8 style guidelines
 - Use type hints for better tooling support
 - Implement async/await for I/O-bound operations
 - Use appropriate data structures (sets for membership, dicts for lookups)
 
 ### General Optimization
+
 - **Measure first**: Use profiling tools before optimizing
 - **Cache wisely**: Cache expensive operations, invalidate properly
 - **Database**: Use indexes, optimize queries, use connection pooling
@@ -399,6 +439,7 @@ describe('UserService', () => {
 ## 🔧 DevEnv Integration
 
 ### Environment Activation
+
 ```bash
 # Automatic (recommended)
 direnv allow                # One-time setup, auto-activates on cd
@@ -411,6 +452,7 @@ devenv shell               # Explicit shell activation
 
 **To DevEnv (system-level tools):**
 Edit `devenv.nix` and rebuild:
+
 ```nix
 packages = with pkgs; [
   # Existing packages...
@@ -419,6 +461,7 @@ packages = with pkgs; [
 ```
 
 **To Project (application dependencies):**
+
 ```bash
 npm install <package>      # JavaScript/TypeScript
 uv add <package>           # Python
@@ -427,6 +470,7 @@ uv add <package>           # Python
 ### Services Configuration
 
 If you need databases or services:
+
 ```nix
 # In devenv.nix
 services = {
@@ -441,24 +485,28 @@ services = {
 ## 🎯 Claude Code Specific Optimizations
 
 ### Token Efficiency
+
 1. **Use Serena symbolic tools** for code exploration (not full file reads)
 2. **Read function-level symbols** instead of entire files when possible
 3. **Use pattern search** to locate code before reading
 4. **Leverage context** from quality gate output to understand issues
 
 ### Workflow Automation
+
 1. **Check quality gates** with `quality-report` when starting work
 2. **Run quality checks** with `quality-check` before suggesting commits
 3. **Explain failures** by analyzing git hook output
 4. **Suggest fixes** based on specific quality gate violations
 
 ### Communication with User
+
 - **Be specific** about which quality gate failed
 - **Explain why** the code violates the threshold
 - **Show before/after** examples when refactoring
 - **Suggest preventive measures** for future code
 
 ### Proactive Quality
+
 - **Generate tests** alongside implementation
 - **Check complexity** while writing functions (mentally track CCN)
 - **Avoid duplication** by searching for similar implementations first
@@ -469,12 +517,14 @@ services = {
 **NEVER use `git commit --no-verify` without explicit user permission.**
 
 When git hooks fail:
+
 1. **First attempt**: Fix the underlying issue (formatting, complexity, tests, security)
 2. **Second attempt**: Fix it again if still failing
 3. **After a couple of failed attempts**: Ask the user if they want to use `--no-verify`
 4. **Only proceed with `--no-verify`** based on user's explicit instruction
 
 Git hooks enforce quality gates (security, complexity, formatting). Bypassing them introduces risks:
+
 - Security vulnerabilities (secrets, injection flaws)
 - Code complexity issues (CCN > 10)
 - Formatting inconsistencies
@@ -487,6 +537,7 @@ This is a critical policy - git hooks exist for quality and security enforcement
 **ALWAYS ask before creating documentation files (.md, .txt, README, etc.)**
 
 Before creating any doc, propose to user:
+
 - **Filename** and **type** (Status/Architecture/Guide/Reference/Changelog)
 - **Purpose** (1-2 sentences explaining why it's needed)
 - **Alternative** (Could this be a section in existing file instead?)
@@ -501,11 +552,13 @@ Wait for approval before writing.
 
 **1. No Temporal Markers**
 Never use time-based references that will become confusing or meaningless:
+
 - ❌ Avoid: "NEW", "NEW 2025", "Week 1", "Phase 2", "October 2025", "Recently added"
 - ❌ Avoid: "ENHANCED", "UPDATED", "DEPRECATED (coming soon)"
 - ✅ Instead: Describe what the code/feature does, not when it was added
 
 **Examples:**
+
 ```python
 # ❌ BAD - Temporal markers lose meaning over time
 # NEW 2025: Advanced authentication system
@@ -521,6 +574,7 @@ class UserAuth:
 
 **2. No Hyperbolic Language**
 Avoid marketing speak and subjective qualifiers in technical documentation:
+
 - ❌ Avoid: "enterprise-grade", "comprehensive", "advanced", "cutting-edge"
 - ❌ Avoid: "robust", "powerful", "superior", "best-in-class", "revolutionary"
 - ❌ Avoid: "state-of-the-art", "world-class", "premium", "next-generation"
@@ -528,13 +582,14 @@ Avoid marketing speak and subjective qualifiers in technical documentation:
 - ✅ Instead: Use factual, technical descriptions
 
 **Examples:**
+
 ```typescript
 // ❌ BAD - Hyperbolic, subjective
 // Enterprise-grade, comprehensive user management system
 // with cutting-edge authentication and advanced security
 class UserManager {
   // Modern, powerful authentication method
-  async login(credentials: Credentials) { }
+  async login(credentials: Credentials) {}
 }
 
 // ✅ GOOD - Factual, descriptive
@@ -542,12 +597,13 @@ class UserManager {
 // and password hashing using bcrypt
 class UserManager {
   // Authenticate user and return JWT token
-  async login(credentials: Credentials) { }
+  async login(credentials: Credentials) {}
 }
 ```
 
 **3. Be Descriptive and Factual**
 Focus on technical details and behavior:
+
 ```javascript
 // ❌ BAD
 // Enhanced data processing pipeline
@@ -565,6 +621,7 @@ Focus on technical details and behavior:
 ```
 
 **4. Comments Should Explain "Why", Not "What"**
+
 ```python
 # ❌ BAD - States the obvious "what"
 # Loop through users
@@ -587,6 +644,7 @@ count += 1
 
 **5. Function/Class Documentation**
 Use JSDoc or Python docstrings, focus on behavior and constraints:
+
 ```typescript
 /**
  * Validates user email format and domain restrictions
@@ -629,6 +687,7 @@ def process_payment(amount: Decimal, currency: str) -> PaymentResult:
 
 **6. Configuration and Magic Numbers**
 Always explain non-obvious values:
+
 ```javascript
 // ❌ BAD
 const TIMEOUT = 30000;
@@ -644,6 +703,7 @@ const MAX_RETRY_ATTEMPTS = 3;
 
 **7. TODO Comments**
 Be specific about what needs to be done and why:
+
 ```python
 # ❌ BAD
 # TODO: Fix this
@@ -661,6 +721,7 @@ Be specific about what needs to be done and why:
 When writing README, CONTRIBUTING, or other documentation:
 
 **Structure**:
+
 - Start with what the project/feature does
 - Explain prerequisites and dependencies
 - Provide installation/setup steps
@@ -669,6 +730,7 @@ When writing README, CONTRIBUTING, or other documentation:
 - List known limitations or constraints
 
 **Tone**:
+
 - Factual and technical
 - Present tense for current behavior
 - Imperative mood for instructions
@@ -676,7 +738,8 @@ When writing README, CONTRIBUTING, or other documentation:
 - Avoid second-person excessive cheerleading ("you'll love", "you'll be amazed")
 
 **Example**:
-```markdown
+
+````markdown
 # User Authentication Module
 
 Handles user registration, login, and session management using JWT tokens.
@@ -694,11 +757,12 @@ Handles user registration, login, and session management using JWT tokens.
 npm install
 npm run setup-db
 ```
+````
 
 ## Usage
 
 ```typescript
-import { AuthService } from './auth';
+import { AuthService } from "./auth";
 
 const auth = new AuthService(config);
 const session = await auth.login(email, password);
@@ -709,7 +773,8 @@ const session = await auth.login(email, password);
 - `JWT_SECRET`: Secret key for token signing (required)
 - `TOKEN_EXPIRY`: Token lifetime in seconds (default: 3600)
 - `MAX_LOGIN_ATTEMPTS`: Failed attempts before lockout (default: 5)
-```
+
+````
 
 ## 📚 Additional Resources
 
@@ -743,9 +808,10 @@ This template follows the **Pure DevEnv approach**:
 direnv allow              # Activate environment
 setup-git-hooks          # Install quality gates
 quality-report           # Verify setup
-```
+````
 
 **Daily Workflow:**
+
 ```bash
 quality-check            # Before committing
 npm test                 # Run test suite (JS/TS)
@@ -753,6 +819,7 @@ pytest                   # Run test suite (Python)
 ```
 
 **Quality Thresholds:**
+
 - CCN < 10 (complexity)
 - < 5% duplication
 - 75%+ test coverage
@@ -760,6 +827,7 @@ pytest                   # Run test suite (Python)
 - Zero security violations
 
 **Git Commit:**
+
 ```bash
 git add .
 git commit -m "feat(module): add feature X"

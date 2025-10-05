@@ -22,7 +22,7 @@
       semgrep --config=auto --severity=WARNING . || echo "⚠️ Semgrep check complete"
       echo "📋 Step 2: Code complexity analysis"
       lizard --CCN 10 src/ . || echo "⚠️ Complexity check complete"
-      jscpd --threshold 5 src/ . || echo "⚠️ Clone detection complete"
+      jscpd --threshold 5 --ignore ".devenv/**,node_modules/**,coverage/**,dist/**" src/ . || echo "⚠️ Clone detection complete"
       echo "📋 Step 3: Running all git hooks"
       devenv test
       echo "✅ Quality check complete"
