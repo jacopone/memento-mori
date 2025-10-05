@@ -7,6 +7,7 @@
     nodejs_20
     git
     gh
+    nix  # Required for git hooks (provides nix-store command)
 
     # Python environment with uv package manager
     uv

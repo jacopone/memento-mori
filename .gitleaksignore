@@ -1,0 +1,19 @@
+# Gitleaks ignore file for memento-mori
+# Template scripts from ai-quality-devenv (not part of production code)
+
+scripts/**
+modules/**
+docs/devenv-architecture.md
+*.md
+AUTONOMOUS_REMEDIATION.md
+CLAUDE_CODE_SETUP.md
+CURSOR_AI_SETUP.md
+GIT_HOOKS_ARCHITECTURE.md
+IMPLEMENTATION_STATUS.md
+INIT_AI_TOOLS_GUIDE.md
+LEGACY_CODEBASE_RESCUE.md
+QUALITY_BASELINE_GATES.md
+
+# Template configuration examples
+.ai-templates/**
+.quality-baseline.json
