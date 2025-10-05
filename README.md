@@ -1,316 +1,221 @@
-# AI Quality DevEnv Template
+# ⏳ Memento Mori - Life in Weeks
 
-Development environment with automated quality gates for AI-assisted coding.
+**A thoughtful daily reminder of life's finite nature and the real time you have left.**
+
+> "Memento Mori" - Remember you will die.
+> "Memento Vivere" - Remember you will live.
+
+## What Is This?
+
+Memento Mori is a CLI tool and daily notification system that visualizes your life in weeks, showing not just total time, but the **meaningful time** you actually have:
+
+- **Total weeks**: Traditional "life in weeks" concept (80 years = 4,160 weeks)
+- **Free weeks**: Time after removing sleep and work obligations
+- **Vacation time**: Remaining vacation weeks in your working life
+- **Family time**: Days left with aging parents (the "See Your Folks" calculation)
+- **Quality time**: Years of healthy, active living vs. declining health
+
+## The Brutal Truth
+
+Research shows:
+
+- **By age 20**: You've already spent 90% of total lifetime days with your parents
+- **After moving out**: Most people see parents only ~10 days/year
+- **Daily reality**: ~9 hours sleep + ~8 hours work = only **4-5 hours of truly free time**
+- **With children**: 75% of time spent with them happens before age 12
+
+This isn't about being morbid - it's about **making the finite time visible so you actually use it wisely**.
 
 ## Features
 
-### 🔒 Security & Quality Gates
-- **Gitleaks**: Secret detection and prevention
-- **Semgrep**: Pattern-based security and code quality scanning
-- **Lizard**: Code complexity analysis (CCN < 10) - *Available system-wide*
-- **JSCPD**: Clone detection via npx wrapper (threshold 5%) - *Available system-wide*
-- **Markdownlint**: Documentation linting
-- **ls-lint**: File and folder naming convention validation
-- **Commitizen-go**: Conventional commit format enforcement
+### 📊 Multi-Perspective Time Tracking
 
-### 🛠️ Development Tools
-- **Node.js 20**: JavaScript/TypeScript runtime
-- **Python 3.13**: Python runtime with uv package manager
-- **ESLint + Prettier**: JavaScript/TypeScript formatting
-- **Black + Ruff**: Python formatting and linting
+- **Total Life View**: Classic weeks lived vs. remaining
+- **Real Free Time**: Adjusted for sleep, work, and obligations
+- **Vacation Calculator**: Remaining vacation weeks until retirement
+- **Parent Time Tracker**: "See Your Folks" - days left based on visit frequency
+- **Children Milestones**: Time remaining in critical development windows
+- **Health-Adjusted Time**: Prime years vs. declining health expectations
+- **Weekend Counter**: Tangible "free weekends" remaining
 
-### 📚 Documentation Tools
-- **JSDoc**: JavaScript API documentation generation
-- **Sphinx**: Python documentation generator
-- **Markdownlint-cli2**: Markdown linting
-- TypeDoc and Interrogate available via npm/uv for project-specific needs
+### 🎨 Rich Terminal UI
 
-### 🤖 Automated Quality Checks
-Quality gates run automatically via pre-commit hooks on each commit.
+- Beautiful progress bars and statistics powered by Rich library
+- Optional grid visualization (90×52 grid showing each week)
+- Contextual wisdom quotes based on life stage
+- Multiple display modes (summary, grid, notification)
 
-**Important**: Git hooks run inside `devenv shell` automatically. This ensures all quality tools (ls-lint, markdownlint, gitleaks, etc.) are available when you commit, even from outside the devenv shell.
+### 🔔 Daily Notifications
+
+- GNOME desktop notifications at configurable time
+- Two styles: "motivational" or "sobering"
+- Gentle reminders to make today count
+- Systemd user timer integration (no sudo required)
+
+### ⚙️ Configurable
+
+Simple JSON config at `~/.config/memento-mori/config.json`:
+
+```json
+{
+  "birthdate": "1990-01-01",
+  "expected_lifespan": 80,
+  "retirement_age": 67,
+  "vacation_weeks_per_year": 3,
+  "parents": {
+    "father_age": 65,
+    "mother_age": 63,
+    "visits_per_year": 10
+  },
+  "notification_time": "08:00",
+  "notification_style": "motivational"
+}
+```
 
 ## Quick Start
 
+### Installation
+
 ```bash
-# Initialize new project with this template
-cd /home/guyfawkes/nixos-config
-cp -r templates/ai-quality-devenv/* /path/to/new-project/
-cd /path/to/new-project
+# Clone and enter development environment
+git clone https://github.com/yourusername/memento-mori
+cd memento-mori
+direnv allow  # or: devenv shell
 
-# Enter development environment
-direnv allow         # Automatic activation (recommended)
-# OR
-devenv shell         # Manual activation
+# Initialize Python project
+uv init
+uv add rich
 
-# Interactive AI tools setup
-init-ai-tools        # Choose Claude Code, Cursor AI, or both
-
-# Git hooks are installed automatically on first devenv shell
-# Verify installation:
-ls -la .git/hooks/pre-commit
-
-# Verify setup
-quality-report
+# Run the tool
+python3 src/memento_mori/cli.py
 ```
 
-## Available Scripts
+### Usage
 
-### AI Tools Setup
-- `init-ai-tools` - Interactive AI tools setup (choose Claude Code, Cursor AI, or both)
-- `setup-cursor` - Setup Cursor AI only (use init-ai-tools instead)
-- `setup-claude` - Setup Claude Code only (use init-ai-tools instead)
+```bash
+# View your life statistics
+memento-mori
 
-### Quality Gates
-- `hello` - Environment information
-- `quality-report` - Show all active quality gates
-- `quality-check` - Run quality analysis
-- `setup-git-hooks` - Install git hooks manually
+# With full grid visualization
+memento-mori --grid
 
-### Legacy Codebase Rescue
-- `assess-codebase` - 8-step codebase analysis
-- `assess-documentation` - Markdown linting, required docs, JSDoc coverage
-- `analyze-folder-structure` - Depth analysis, god directories, structure score
-- `check-naming-conventions` - File/folder naming validation
-- `generate-remediation-plan` - AI-powered remediation plan with self-awareness
-- `quality-dashboard` - Real-time quality metrics for 7 quality categories
-- `post-commit-docs` - Auto-documentation reminders after commits
+# Edit configuration
+memento-mori --config
 
-See `LEGACY_CODEBASE_RESCUE.md` for complete rescue system documentation.
+# Test notification format
+memento-mori --notify
+```
 
-### Quality Baseline Gates
-- `check-feature-readiness` - Validate all quality baseline thresholds before features
-- `certify-feature-ready` - Lock in baseline and enable strict mode enforcement
-- `quality-regression-check` - Pre-commit validation against baseline (strict mode)
+### Fish Shell Abbreviation
 
-See `QUALITY_BASELINE_GATES.md` for complete baseline gates system documentation.
+```bash
+# Add to Fish config
+abbr mm memento-mori
+```
 
-### Autonomous Execution
+## Example Output
 
-#### Tier 1: Core Autonomy
-- `initialize-remediation-state` - Initialize autonomous remediation with state management
-- `update-remediation-state` - Internal: Update persistent state
-- `identify-next-targets` - Smart target prioritization algorithm
-- `checkpoint-progress` - Git commit automation with tagging every 5 commits
-- `needs-human-checkpoint` - Safety gate checking for human approval
-- `validate-target-improved` - Automatic validation of refactoring improvements
-- `mark-checkpoint-approved` - Mark human approval for phase transitions
-- `rollback-to-checkpoint` - Rollback to last stable checkpoint
+```
+╔═══════════════════════════════════════════════════════════╗
+║              ⏳ MEMENTO MORI - THE REAL TIME             ║
+║        Remember you will die. Make the time count.        ║
+╠═══════════════════════════════════════════════════════════╣
+║                                                           ║
+║  YOUR TOTAL LIFE                                          ║
+║  ████████████████░░░░░░░░░░░  52.3%                      ║
+║  Weeks lived: 2,178  |  Weeks left: 1,982                ║
+║                                                           ║
+║  YOUR TRULY FREE TIME (sleep/work removed)                ║
+║  ████████████████████░░░░░  68.1%                        ║
+║  Free weeks used: 682  |  Free weeks left: 318           ║
+║                                                           ║
+╠═══════════════════════════════════════════════════════════╣
+║  💼 WORKING LIFE                                          ║
+║    Years until retirement: 25 (1,300 weeks)               ║
+║    Vacation weeks remaining: ~75 weeks                    ║
+║                                                           ║
+║  👨‍👩‍👧 FAMILY TIME                                            ║
+║    Days left with parents: ~240 days (visiting 10x/year) ║
+║    90% of lifetime with them: Already spent              ║
+║                                                           ║
+║  🌅 WEEKENDS LEFT                                         ║
+║    Saturday/Sunday freedom: ~1,300 weekends              ║
+╚═══════════════════════════════════════════════════════════╝
 
-#### Tier 2: Orchestration
-- `autonomous-remediation-session` - Main orchestrator for supervised autonomous refactoring
+"You may have 30 years left, but you only have 300 days
+ left with your parents. Book the visit."
+```
 
-#### Tier 3: Optimization & Analytics
-- `estimate-token-usage` - Predict token cost for files and optimize batch sizing
-- `analyze-failure-patterns` - Identify common failure reasons and suggest strategies
-- `generate-progress-report` - Stakeholder-friendly markdown report with metrics and ROI
-- `parallel-remediation-coordinator` - Multi-agent coordination with work queue distribution
+## Architecture
 
-See `AUTONOMOUS_REMEDIATION.md` for complete autonomous execution documentation.
+- **Language**: Python 3.13 with uv package manager
+- **UI**: Rich library for terminal rendering
+- **Notifications**: GNOME `notify-send`
+- **Automation**: systemd user timers
+- **Development**: DevEnv with quality gates (Lizard, JSCPD, Gitleaks)
+- **AI Integration**: Claude Code and Cursor AI configurations included
 
 ## Quality Standards
 
-### Complexity Thresholds
-- **Cyclomatic Complexity**: < 10 (McCabe standard)
-- **Function Length**: < 50 lines
-- **Code Duplication**: < 5% threshold
-- **Security Patterns**: Auto-detection via Semgrep
+This project uses enterprise-grade quality gates:
 
-### Pre-commit Hooks
-All hooks run automatically on commit:
-1. **Security**: Gitleaks secret scanning
-2. **Format**: Prettier/ESLint for JS/TS, Black/Ruff for Python
-3. **Quality**: Complexity analysis and clone detection (*via system tools*)
-4. **Patterns**: Security vulnerability detection
-5. **Messages**: Conventional commit format
-
-> **Note**: Lizard (complexity) and JSCPD (clone detection) are available system-wide through your NixOS configuration rather than in the DevEnv package set for optimal performance and consistency.
-
-## Customization
-
-### Adding Packages
-Edit `devenv.nix`:
-```nix
-packages = with pkgs; [
-  # Existing packages...
-  your-additional-package
-];
-```
-
-### Adding Services
-Edit `devenv.nix`:
-```nix
-services = {
-  postgres.enable = true;
-  redis.enable = true;
-};
-```
-
-### Adjusting Quality Thresholds
-Modify hook configurations in `git-hooks.hooks` section.
-
-## AI Development Integration
-
-This template supports both Cursor AI and Claude Code with quality gate awareness.
-
-### Cursor AI Integration
-
-Uses `.cursor/rules` with MDC format files.
-
-**Available Rule Files:**
-- **`index.mdc`**: Core development rules with quality standards and technology stack
-- **`security.mdc`**: Security-focused rules for secure coding practices
-- **`testing.mdc`**: Testing and QA rules for test coverage
-
-**Configuration Features:**
-- YOLO Mode for AI capabilities with build/test execution
-- Claude 3.5 Sonnet (primary), GPT-4o (secondary) model selection
-- Agent Mode shortcuts (`Ctrl+I` for agent, `Ctrl+E` for background)
-- Privacy settings for sensitive code
-- Context management with `.cursorignore`
-
-**Setup:**
-```bash
-# Option 1: Interactive
-init-ai-tools                   # Select Cursor AI in the prompt
-
-# Option 2: Direct
-setup-cursor                    # Initialize Cursor AI integration
-
-# Customize
-# Edit .cursor/rules/*.mdc      # Adjust AI behavior and rules
-```
-
-### Claude Code Integration
-
-Uses `.claude/CLAUDE.md` for Claude Code instructions.
-
-**Key Features:**
-- Quality Gate Awareness: Claude knows all thresholds (CCN < 10, duplication < 5%, etc.)
-- MCP Serena Integration: Symbolic code operations for token efficiency
-- DevEnv Context: Understanding of Node.js 20, Python 3.13, uv, quality tools
-- Pre/Post Hooks: Quality reminders on Write/Edit operations
-- Settings: Permissions, environment variables, MCP server enablement
-
-**Configuration Files:**
-- **`.claude/CLAUDE.md`**: Development guidelines
-  - Quality gate compliance strategies
-  - MCP Serena tool usage
-  - Technology stack integration
-  - Security-first development patterns
-  - Code generation best practices
-- **`.claude/settings.local.json`**: Hooks, permissions, environment variables
-- **`.claudeignore`**: Exclude build artifacts and dependencies from context
-
-**Setup:**
-```bash
-# Option 1: Interactive
-init-ai-tools                   # Select Claude Code in the prompt
-
-# Option 2: Direct
-setup-claude                    # Initialize Claude Code integration
-
-# Customize
-# Edit .claude/CLAUDE.md        # Adjust behavior and guidelines
-
-# Documentation
-# See CLAUDE_CODE_SETUP.md for complete setup guide
-```
-
-### Shared Quality Standards
-
-Both AI systems enforce identical quality gates:
 - **Complexity**: CCN < 10 per function (Lizard)
 - **Duplication**: < 5% threshold (JSCPD)
-- **Security**: Zero secrets (Gitleaks), zero vulnerabilities (Semgrep)
-- **Formatting**: Prettier/ESLint (JS/TS), Black/Ruff (Python)
-- **Testing**: 75%+ coverage for new code
-- **Commits**: Conventional Commits format (Commitizen)
+- **Security**: Zero secrets (Gitleaks)
+- **Formatting**: Black + Ruff for Python
+- **Testing**: 75%+ coverage target
+- **Commits**: Conventional Commits format
 
-## Architecture: Pure DevEnv Approach
+## Development
 
-This template uses only `devenv.nix` based on the `account-harmony-ai-37599577` pattern:
-
-### 🔧 devenv.nix - Development Configuration
-- Single configuration file for all development needs
-- DevEnv automatically generates `.devenv.flake.nix` for Nix compatibility
-- Includes git hooks, scripts, and automation
-- Designed for coding workflows with quality gates
-- Integrates with direnv and development processes
-
-### 🎯 Why Pure DevEnv?
-- **Simplicity**: Single `devenv.nix` file to maintain
-- **Automatic Nix integration**: DevEnv handles flake generation automatically
-- **Developer-focused**: Built for development workflows, not packaging
-- **Proven pattern**: Based on production usage in account-harmony-ai
-- **Reduced complexity**: No need to maintain separate flake.nix and devenv.nix files
-- **Optimized for development**: DevEnv optimized for development speed
-
-### 🔄 How it works
-1. **You maintain**: Only `devenv.nix` with your development environment
-2. **DevEnv generates**: `.devenv.flake.nix` automatically for Nix compatibility
-3. **You get**: Nix ecosystem benefits without the complexity
-
-## Troubleshooting
-
-### Git Hooks Not Running
-
-If git hooks fail with "Executable not found" errors:
-
-1. **Verify devenv shell activation**:
-   ```bash
-   devenv shell bash -c "which ls-lint"
-   # Should show: /nix/store/.../ls-lint-2.3.1/bin/ls-lint
-   ```
-
-2. **Regenerate hooks**:
-   ```bash
-   rm -f .pre-commit-config.yaml .git/hooks/*
-   devenv shell  # Hooks auto-install on shell entry
-   ```
-
-3. **Check .pre-commit-config.yaml**:
-   ```bash
-   # ls-lint entry should be wrapped in devenv shell:
-   grep "ls-lint" .pre-commit-config.yaml
-   # Should show: "entry": "devenv shell bash -c 'ls-lint'"
-   ```
-
-### Git Hooks Architecture
-
-**How it works**:
-- Git hooks run **outside** the devenv shell by default
-- Template wraps quality tools in `devenv shell bash -c 'command'`
-- This ensures tools are available when git triggers hooks
-- The `nix` package in devenv.nix provides `nix-store` for GC root creation
-
-**Why this approach**:
-- No need to install tools system-wide
-- Works in any environment (CI, different machines, containers)
-- Developers don't need to remember to run hooks from within devenv shell
-- Quality gates enforced automatically on every commit
-
-### Common Issues
-
-**"nix-store: command not found"** during devenv shell:
-- Solution: `nix` package is included in template's devenv.nix
-- If using older version, add `pkgs.nix` to packages list
-
-**Hooks slow on first run**:
-- First commit after `devenv shell` spawns new devenv instance
-- Subsequent commits are faster (devenv shell cached)
-- This is expected behavior
-
-**"Your pre-commit configuration is unstaged"**:
 ```bash
-git add .pre-commit-config.yaml
-git commit -m "your message"
+# Enter development environment
+devenv shell
+
+# Run quality checks
+quality-report
+quality-check
+
+# Run tests
+pytest
+
+# Format code
+ruff format .
+
+# Check complexity
+lizard src/
 ```
 
-## Integration
+## Philosophy
 
-This template integrates with:
-- **NixOS**: System-wide tool consistency
-- **AI orchestration**: Claude Code, Cursor, other AI tools
-- **CI/CD**: `devenv test` for automated quality verification
-- **Development**: Automatic environment activation via direnv
+This tool is inspired by:
+
+- **Stoic philosophy**: Memento Mori as a call to action, not despair
+- **Wait But Why**: "The Tail End" - visualizing limited time with loved ones
+- **See Your Folks calculator**: Making parent mortality tangible
+- **Life in Weeks**: Tim Urban's famous grid visualization
+
+The goal is not to create anxiety, but to create **clarity and urgency** around what matters most.
+
+## License
+
+MIT
+
+## Credits
+
+Built with:
+
+- [Rich](https://github.com/Textualize/rich) - Beautiful terminal UI
+- [DevEnv](https://devenv.sh/) - Development environment
+- AI Quality DevEnv Template - Enterprise development standards
+
+Inspired by:
+
+- Tim Urban's "The Tail End" (Wait But Why)
+- "See Your Folks" mortality calculator
+- Stoic Memento Mori tradition
+- Various life-in-weeks visualizations
+
+---
+
+**Remember: You have less time than you think. Make it count.**
