@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Memento Mori CLI wrapper script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PYTHONPATH="$SCRIPT_DIR/src:$PYTHONPATH"
+python3 -m memento_mori.cli "$@"

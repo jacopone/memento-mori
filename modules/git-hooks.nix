@@ -62,7 +62,7 @@
       name = "clone-detection";
       entry = "jscpd --threshold 5 --min-lines 10";  # Available system-wide
       files = "\\.(js|ts|tsx)$";
-      excludes = [ "node_modules/" "coverage/" "dist/" ];
+      excludes = [ "node_modules/" "coverage/" "dist/" ".devenv/" ];
     };
 
     semgrep = {
