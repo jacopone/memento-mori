@@ -6,7 +6,6 @@ Core calculations for life statistics and time tracking.
 
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Optional
 
 
 @dataclass
@@ -62,9 +61,9 @@ class FreeTimeStats:
     """Calculate truly free time after obligations."""
 
     life_stats: LifeStats
-    sleep_hours_per_day: float = 9.0
-    work_hours_per_day: float = 8.1
-    chores_hours_per_day: float = 2.0
+    sleep_hours_per_day: float
+    work_hours_per_day: float
+    chores_hours_per_day: float
 
     @property
     def total_obligated_hours_per_day(self) -> float:
@@ -97,7 +96,7 @@ class WorkLifeStats:
     """Calculate work and vacation statistics."""
 
     life_stats: LifeStats
-    started_working_age: int = 22
+    started_working_age: int
 
     @property
     def years_until_retirement(self) -> float:
@@ -119,20 +118,20 @@ class WorkLifeStats:
 class ParentTimeStats:
     """Calculate time remaining with parents ('See Your Folks' style)."""
 
-    father_age: Optional[int] = None
-    mother_age: Optional[int] = None
-    visits_per_year: int = 10
-    days_per_visit: int = 2
-    parent_life_expectancy: int = 80
+    father_age: int | None
+    mother_age: int | None
+    visits_per_year: int
+    days_per_visit: int
+    parent_life_expectancy: int
 
-    def days_left_with_father(self) -> Optional[int]:
+    def days_left_with_father(self) -> int | None:
         """Estimated days left with father."""
         if not self.father_age:
             return None
         years_left = max(0, self.parent_life_expectancy - self.father_age)
         return int(years_left * self.visits_per_year * self.days_per_visit)
 
-    def days_left_with_mother(self) -> Optional[int]:
+    def days_left_with_mother(self) -> int | None:
         """Estimated days left with mother."""
         if not self.mother_age:
             return None
@@ -167,9 +166,17 @@ def calculate_all_stats(
     birthdate: date,
     expected_lifespan: int = 80,
     retirement_age: int = 67,
-    father_age: Optional[int] = None,
-    mother_age: Optional[int] = None,
+    work_hours_per_week: float = 40.0,
+    vacation_weeks_per_year: int = 3,
+    sleep_hours_per_day: float = 9.0,
+    work_hours_per_day: float = 8.1,
+    chores_hours_per_day: float = 2.0,
+    started_working_age: int = 22,
+    father_age: int | None = None,
+    mother_age: int | None = None,
     visits_per_year: int = 10,
+    days_per_visit: int = 2,
+    parent_life_expectancy: int = 80,
 ) -> dict:
     """
     Calculate all life statistics.
@@ -180,12 +187,25 @@ def calculate_all_stats(
         birthdate=birthdate,
         expected_lifespan=expected_lifespan,
         retirement_age=retirement_age,
+        work_hours_per_week=work_hours_per_week,
+        vacation_weeks_per_year=vacation_weeks_per_year,
     )
 
     return {
         "life": life_stats,
-        "free_time": FreeTimeStats(life_stats),
-        "work": WorkLifeStats(life_stats),
-        "parents": ParentTimeStats(father_age, mother_age, visits_per_year),
+        "free_time": FreeTimeStats(
+            life_stats,
+            sleep_hours_per_day=sleep_hours_per_day,
+            work_hours_per_day=work_hours_per_day,
+            chores_hours_per_day=chores_hours_per_day,
+        ),
+        "work": WorkLifeStats(life_stats, started_working_age=started_working_age),
+        "parents": ParentTimeStats(
+            father_age=father_age,
+            mother_age=mother_age,
+            visits_per_year=visits_per_year,
+            days_per_visit=days_per_visit,
+            parent_life_expectancy=parent_life_expectancy,
+        ),
         "weekends": WeekendStats(life_stats),
     }

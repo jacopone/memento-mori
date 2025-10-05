@@ -7,13 +7,12 @@ Handles loading, saving, and validating user configuration.
 import json
 from datetime import date, datetime
 from pathlib import Path
-from typing import Optional
 
 
 class MementoMoriConfig:
     """Manage memento-mori configuration."""
 
-    def __init__(self, config_path: Optional[Path] = None):
+    def __init__(self, config_path: Path | None = None):
         """Initialize configuration manager."""
         self.config_path = config_path or Path.home() / ".config/memento-mori/config.json"
         self.config = self._load_config()
@@ -36,6 +35,16 @@ class MementoMoriConfig:
             "expected_lifespan": 80,
             "retirement_age": 67,
             "vacation_weeks_per_year": 3,
+            "time_assumptions": {
+                "sleep_hours_per_day": 9.0,
+                "work_hours_per_day": 8.1,
+                "chores_hours_per_day": 2.0,
+                "work_hours_per_week": 40.0,
+            },
+            "life_milestones": {
+                "started_working_age": 22,
+                "parent_life_expectancy": 80,
+            },
             "parents": {
                 "father_age": None,
                 "mother_age": None,
@@ -68,10 +77,18 @@ class MementoMoriConfig:
         """Get configuration value."""
         return self.config.get(key, default)
 
+    def get_time_assumption(self, key: str, default: float) -> float:
+        """Get time assumption value with fallback."""
+        return self.config.get("time_assumptions", {}).get(key, default)
+
+    def get_life_milestone(self, key: str, default: int) -> int:
+        """Get life milestone value with fallback."""
+        return self.config.get("life_milestones", {}).get(key, default)
+
     def edit_with_editor(self) -> None:
         """Open config in default editor."""
-        import subprocess
         import os
+        import subprocess
 
         editor = os.environ.get("EDITOR", "nano")
         subprocess.run([editor, str(self.config_path)])
